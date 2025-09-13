@@ -26,6 +26,19 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    // Get the database and collection on which to run the operation
+    const jobsCollection =client.db('job-portal').collection('jobs')
+    // get jobs api
+    app.get('/jobs', async(req, res)=>{
+        const cursor = jobsCollection.find();
+        const result =await cursor.toArray();
+        res.send(result);
+    })
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
