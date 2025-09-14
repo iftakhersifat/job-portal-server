@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express();
 const port = process.env.PORT || 3000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 //middleware
@@ -29,11 +29,28 @@ async function run() {
 
     // Get the database and collection on which to run the operation
     const jobsCollection =client.db('job-portal').collection('jobs')
-    // get jobs api
+    // get all jobs api
     app.get('/jobs', async(req, res)=>{
         const cursor = jobsCollection.find();
         const result =await cursor.toArray();
         res.send(result);
+    })
+    // get single jobs 
+    app.get('/jobs/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query ={_id: new ObjectId(id)};
+        const result = await jobsCollection.findOne(query);
+        res.send(result);
+    })
+
+    // job application collection
+    const applicationsCollection = client.db('job-portal').collection('applications')
+
+    // application send data in server (create)
+    app.post('/applications', async(req, res)=>{
+      const application = req.body;
+      const result = await applicationsCollection.insertOne(application);
+      res.send(result)
     })
 
 
