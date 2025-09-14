@@ -29,12 +29,15 @@ async function run() {
 
     // Get the database and collection on which to run the operation
     const jobsCollection =client.db('job-portal').collection('jobs')
+    // HotJob.jsx
     // get all jobs api
     app.get('/jobs', async(req, res)=>{
         const cursor = jobsCollection.find();
         const result =await cursor.toArray();
         res.send(result);
     })
+
+    // JobDetails.jsx
     // get single jobs 
     app.get('/jobs/:id', async(req, res)=>{
         const id = req.params.id;
@@ -46,12 +49,21 @@ async function run() {
     // job application collection
     const applicationsCollection = client.db('job-portal').collection('applications')
 
+    // JobApply.jsx
     // application send data in server (create)
     app.post('/applications', async(req, res)=>{
       const application = req.body;
       const result = await applicationsCollection.insertOne(application);
       res.send(result)
     })
+    // get application from one email
+app.get('/applications', async (req, res) => {
+  const email = req.query.email;
+  const query = { applicant: email }; 
+  const result = await applicationsCollection.find(query).toArray(); 
+  res.send(result); 
+});
+
 
 
 
