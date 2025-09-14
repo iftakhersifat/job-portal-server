@@ -56,13 +56,33 @@ async function run() {
       const result = await applicationsCollection.insertOne(application);
       res.send(result)
     })
-    // get application from one email
+
+    // ApplicationList.jsx
+   // get application from one email
 app.get('/applications', async (req, res) => {
   const email = req.query.email;
   const query = { applicant: email }; 
   const result = await applicationsCollection.find(query).toArray(); 
-  res.send(result); 
+
+  // add data from application collection
+  for (const application of result) {
+    const jobId = application.id; 
+    const job = await jobsCollection.findOne({ _id: new ObjectId(jobId) });
+    
+    if (job) {
+      application.company = job.company;
+      application.title = job.title;
+      application.company_logo = job.company_logo;
+      application.location = job.location;
+      application.jobType = job.jobType;
+      application.category = job.category;
+    }
+  }
+
+  res.send(result);
 });
+
+
 
 
 
