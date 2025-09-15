@@ -46,6 +46,18 @@ async function run() {
         res.send(result);
     })
 
+    // AddJob.jsx
+    // send job data from frontend 
+    app.post('/jobs', async(req,res)=>{
+      const addJobs= req.body;
+      const result= await jobsCollection.insertOne(addJobs)
+      res.send(result)
+    })
+
+
+
+
+
     // job application collection
     const applicationsCollection = client.db('job-portal').collection('applications')
 
@@ -59,7 +71,7 @@ async function run() {
 
     // ApplicationList.jsx
    // get application from one email
-app.get('/applications', async (req, res) => {
+  app.get('/applications', async (req, res) => {
   const email = req.query.email;
   const query = { applicant: email }; 
   const result = await applicationsCollection.find(query).toArray(); 
