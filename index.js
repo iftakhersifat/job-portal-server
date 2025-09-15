@@ -32,7 +32,13 @@ async function run() {
     // HotJob.jsx
     // get all jobs api
     app.get('/jobs', async(req, res)=>{
-        const cursor = jobsCollection.find();
+      // for job add find by email
+      const email = req.query.email;
+      let query={}
+      if(email){
+        query = {hr_email : email}
+      }
+        const cursor = jobsCollection.find(query);
         const result =await cursor.toArray();
         res.send(result);
     })
@@ -53,6 +59,14 @@ async function run() {
       const result= await jobsCollection.insertOne(addJobs)
       res.send(result)
     })
+
+    // get jobs which post from frontend
+    // app.get('/jobsByEmail', async(req, res)=>{
+    //   const email = req.query.email;
+    //   const query = { hr_email: email }; 
+    //   const result = await jobsCollection.findOne(query).toArray();
+    //   res.send(result);
+    // })
 
 
 
