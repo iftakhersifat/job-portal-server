@@ -108,6 +108,14 @@ async function run() {
   res.send(result);
 });
 
+  //  view applications
+  app.get("/applications/job/:id", async(req,res)=>{
+    const id = req.params.id;
+    const query= {id: id};
+    const result=await applicationsCollection.find(query).toArray();
+    res.send(result)
+  })
+
 
 
 
