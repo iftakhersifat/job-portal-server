@@ -60,6 +60,13 @@ async function run() {
       res.send(result)
     })
 
+    // delete
+    app.delete("/jobs/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await jobsCollection.deleteOne({ _id: new ObjectId(id) });
+  res.send(result);
+});
+
     // get jobs which post from frontend
     // app.get('/jobsByEmail', async(req, res)=>{
     //   const email = req.query.email;
@@ -74,6 +81,7 @@ async function run() {
 
     // job application collection
     const applicationsCollection = client.db('job-portal').collection('applications')
+    
 
     // JobApply.jsx
     // application send data in server (create)
@@ -82,6 +90,14 @@ async function run() {
       const result = await applicationsCollection.insertOne(application);
       res.send(result)
     })
+
+    // delete
+    app.delete("/applications/:id", async (req, res) => {
+  const id = req.params.id;
+  const result = await applicationsCollection.deleteOne({ _id: new ObjectId(id) });
+  res.send(result);
+});
+
 
     // ApplicationList.jsx
    // get application from one email
@@ -102,6 +118,7 @@ async function run() {
       application.location = job.location;
       application.jobType = job.jobType;
       application.category = job.category;
+      application.status = job.status;
     }
   }
 
